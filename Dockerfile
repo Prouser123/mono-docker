@@ -1,10 +1,9 @@
 # Mono alpine dockerfile (work in progress)
 # Parts of this dockerfile are taken from the mono package APKBUILD <https://git.alpinelinux.org/aports/tree/testing/mono/APKBUILD>
 
-FROM alpine:3.12
+FROM alpine:3.14 as builder
 
 ENV MONO_VERSION=6.12.0.122
-ENV PREFIX=/src/build
 
 RUN mkdir /src && cd /src && \
     wget -O mono.tar.xz https://download.mono-project.com/sources/mono/mono-$MONO_VERSION.tar.xz && \
@@ -18,7 +17,7 @@ RUN mkdir /src && cd /src && \
 	# Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
     # Run configure
-    ./configure --prefix=$PREFIX && \
+    ./configure --prefix=/src/build/usr && \
 	# Run make commands
 	make && \
 	make install && \
@@ -32,3 +31,13 @@ RUN mkdir /src && cd /src && \
     # Sanity check: run mono -V
     #mono -V
     # next, make smol img with mono
+
+
+FROM alpine:3.14
+
+COPY --from=builder /src/build/ /
+
+# Runtime deps from mono edge/testing package
+RUN apk add --no-cache libgcc python3 zlib && \
+	# Sanity check, can we get the mono version?
+	mono -V
