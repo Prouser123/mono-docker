@@ -32,6 +32,6 @@ jobs:
         # x86, x64, armhf, armv7, arm64
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7,linux/arm/v6 \
+            --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 \
             --output "type=image,push=$([[ $GITHUB_REF == "refs/heads/main" ]] && echo true || echo false)" \
             -f Dockerfile -t jcxldn/mono:latest .

@@ -15,10 +15,8 @@ RUN mkdir /src && cd /src && \
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache libgdiplus-dev@testing zlib-dev linux-headers git autoconf libtool automake build-base gettext cmake python3 curl && \
 	# Set env variables (from APKBUILD)
-	# > Based on Fedora and SUSE package.
+	# Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
-	# > Set the minimum arch for x86 to prevent atomic linker errors.
-	[ "$CARCH" = "x86" ] && export CFLAGS="$CFLAGS -march=i586 -mtune=generic" || echo not x86 && \
     # Run configure
     ./configure --prefix=$PREFIX && \
 	# Run make commands
