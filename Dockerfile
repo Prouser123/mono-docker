@@ -7,7 +7,8 @@ ENV PREFIX=/src/build
 
 RUN mkdir /src && cd /src && \
     wget -O mono.tar.xz https://download.mono-project.com/sources/mono/mono-$MONO_VERSION.tar.xz && \
-    tar xvf mono.tar.xz && \
+    echo "Extracting mono.tar.xz (verbose disabled).." && \
+	tar xf mono.tar.xz && \
     cd mono-$MONO_VERSION && \
     # Install build deps
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
