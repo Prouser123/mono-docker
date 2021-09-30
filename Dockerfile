@@ -16,11 +16,24 @@ RUN mkdir /src && cd /src && \
 	# Set env variables (from APKBUILD)
 	# Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
-    # Run configure
-    ./configure --prefix=/src/build/usr && \
-	# Run make commands
+    # Run autogen (from APKBUILD)
+	# Run autogen to fix supplied configure linker issues with make install.
+	./autogen.sh \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--disable-rpath \
+		--disable-boehm \
+		--enable-parallel-mark \
+		--with-mcs-docs=no \
+		--without-sigaltstack && \
 	make && \
-	make install && \
+	# Run make install (from APKBUILD)
+	make -j1 DESTDIR="/src/build/" install && \
 	# cd into build dir and remove unnecessary files (from APKBUILD)
 	cd /src/build && \
 	# > Remove .la files.
@@ -28,11 +41,8 @@ RUN mkdir /src && cd /src && \
 	# > Remove Windows-only stuff.
 	rm -r ./usr/lib/mono/*/Mono.Security.Win32* && \
 	rm ./usr/lib/libMonoSupportW.*
-    # Sanity check: run mono -V
-    #mono -V
-    # next, make smol img with mono
 
-
+# Second stage: Create a docker image with only the mono runtime + runtime deps (fresh image)
 FROM alpine:3.14
 
 COPY --from=builder /src/build/ /
