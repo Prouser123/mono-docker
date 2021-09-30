@@ -18,7 +18,7 @@ RUN mkdir /src && cd /src && \
 	# > Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
 	# > Set the minimum arch for x86 to prevent atomic linker errors.
-	[ "$CARCH" = "x86" ] && export CFLAGS="$CFLAGS -march=i586 -mtune=generic" && \
+	[ "$CARCH" = "x86" ] && export CFLAGS="$CFLAGS -march=i586 -mtune=generic" || echo not x86 && \
     # Run configure
     ./configure --prefix=$PREFIX && \
 	# Run make commands
