@@ -1,4 +1,5 @@
 # Mono alpine dockerfile (work in progress)
+# Parts of this dockerfile are taken from the mono package APKBUILD <https://git.alpinelinux.org/aports/tree/testing/mono/APKBUILD>
 
 FROM alpine:3.12
 
@@ -13,18 +14,21 @@ RUN mkdir /src && cd /src && \
     # Install build deps
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache libgdiplus-dev@testing zlib-dev linux-headers git autoconf libtool automake build-base gettext cmake python3 curl && \
-	# [From alpine testing APKBUILD] Based on Fedora and SUSE package.
+	# Set env variables (from APKBUILD)
+	# > Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
+	# > Set the minimum arch for x86 to prevent atomic linker errors.
+	[ "$CARCH" = "x86" ] && export CFLAGS="$CFLAGS -march=i586 -mtune=generic"
     # Run configure
     ./configure --prefix=$PREFIX && \
 	# Run make commands
 	make && \
 	make install && \
-	# cd into build dir and remove unnecessary files (from alpine APKBUILD <https://git.alpinelinux.org/aports/tree/testing/mono/APKBUILD>)
+	# cd into build dir and remove unnecessary files (from APKBUILD)
 	cd /src/build && \
-	# Remove .la files.
+	# > Remove .la files.
 	rm ./usr/lib/*.la && \
-	# Remove Windows-only stuff.
+	# > Remove Windows-only stuff.
 	rm -r ./usr/lib/mono/*/Mono.Security.Win32* && \
 	rm ./usr/lib/libMonoSupportW.*
     # Sanity check: run mono -V
