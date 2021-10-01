@@ -31,13 +31,13 @@ jobs:
         name: Run Buildx
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 \
+            --platform linux/amd64,linux/arm64,linux/arm/v7 \
             --output "type=image,push=$([[ $GITHUB_REF == "refs/heads/main" ]] && echo true || echo false)" \
             -f Dockerfile -t jcxldn/mono:latest .
       -
         name: Run Buildx (apps/tshock)
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 \
+            --platform linux/amd64,linux/arm64,linux/arm/v7 \
             --output "type=image,push=$([[ $GITHUB_REF == "refs/heads/main" ]] && echo true || echo false)" \
             -f apps/tshock/Dockerfile -t jcxldn/mono:tshock .
