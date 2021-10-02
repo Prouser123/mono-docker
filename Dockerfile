@@ -7,7 +7,7 @@ ENV MONO_VERSION=6.12.0.122
 
 COPY runtime-makefile-am.patch /src/runtime-makefile-am.patch
 
-RUN mkdir /src && cd /src && \
+RUN cd /src && \
     wget -O mono.tar.xz https://download.mono-project.com/sources/mono/mono-$MONO_VERSION.tar.xz && \
     echo "Extracting mono.tar.xz (verbose disabled).." && \
 	tar xf mono.tar.xz && \
