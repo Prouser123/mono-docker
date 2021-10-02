@@ -31,9 +31,10 @@ RUN mkdir /src && cd /src && \
 		--enable-parallel-mark \
 		--with-mcs-docs=no \
 		--without-sigaltstack && \
-	make && \
+	make get-monolite-latest && \
+	make -j$(nproc) && \
 	# Run make install (from APKBUILD)
-	make -j1 DESTDIR="/src/build/" install && \
+	make -j$(nproc) DESTDIR="/src/build/" install && \
 	# cd into build dir and remove unnecessary files (from APKBUILD)
 	cd /src/build && \
 	# > Remove .la files.
