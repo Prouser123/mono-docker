@@ -12,11 +12,11 @@ RUN cd /src && \
     echo "Extracting mono.tar.xz (verbose disabled).." && \
 	tar xf mono.tar.xz && \
     cd mono-$MONO_VERSION && \
-	# Patch runtime/Makefile.am to ignore output 
-	git apply ../runtime-makefile-am.patch --ignore-space-change && \
     # Install build deps
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache libgdiplus-dev@testing zlib-dev linux-headers git autoconf libtool automake build-base gettext cmake python3 curl && \
+	# Patch runtime/Makefile.am to ignore output 
+	git apply ../runtime-makefile-am.patch --ignore-space-change && \
 	# Set env variables (from APKBUILD)
 	# Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
