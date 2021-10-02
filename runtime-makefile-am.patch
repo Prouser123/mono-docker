@@ -5,13 +5,13 @@ index 154b728..120c0c9 100644
 @@ -101,7 +101,11 @@ MAKE_FLAGS=$(if $(V),,--no-print-directory -s)
  # The write check is to foil 'make distcheck'
  all-mcs: $(SUPPORT_FILES) $(TEST_SUPPORT_FILES)
-        if test -w $(mcs_topdir); then :; else chmod -R +w $(mcs_topdir); fi
--       cd $(mcs_topdir) && $(MAKE) $(MAKE_FLAGS) NO_DIR_CHECK=1 PROFILES='$(build_profiles)' CC='$(CC)' all-profiles
-+       echo "jcx patch: ignore output from all-profiles"
-+       echo "jcx patch: test ignore"
-+       -$(exit 1)
-+       echo $?
-+       -cd $(mcs_topdir) && $(MAKE) $(MAKE_FLAGS) NO_DIR_CHECK=1 PROFILES='$(build_profiles)' CC='$(CC)' all-profiles && exit 1
+	if test -w $(mcs_topdir); then :; else chmod -R +w $(mcs_topdir); fi
+-	cd $(mcs_topdir) && $(MAKE) $(MAKE_FLAGS) NO_DIR_CHECK=1 PROFILES='$(build_profiles)' CC='$(CC)' all-profiles
++	echo "jcx patch: ignore output from all-profiles"
++	echo "jcx patch: test ignore"
++	-$(exit 1)
++	echo $?
++	-cd $(mcs_topdir) && $(MAKE) $(MAKE_FLAGS) NO_DIR_CHECK=1 PROFILES='$(build_profiles)' CC='$(CC)' all-profiles && exit 1
  
  install-mcs: install-mcs-exec install-mcs-data
  

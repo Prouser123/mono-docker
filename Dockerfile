@@ -16,7 +16,7 @@ RUN cd /src && \
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache libgdiplus-dev@testing zlib-dev linux-headers git autoconf libtool automake build-base gettext cmake python3 curl && \
 	# Patch runtime/Makefile.am to ignore output 
-	git apply ../runtime-makefile-am.patch --ignore-space-change && \
+	git apply ../runtime-makefile-am.patch && \
 	# Set env variables (from APKBUILD)
 	# Based on Fedora and SUSE package.
 	export CFLAGS="$CFLAGS -fno-strict-aliasing" && \
