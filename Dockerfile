@@ -5,11 +5,15 @@ FROM alpine:3.14 as builder
 
 ENV MONO_VERSION=6.12.0.122
 
+COPY runtime-makefile-am.patch /src/
+
 RUN mkdir /src && cd /src && \
     wget -O mono.tar.xz https://download.mono-project.com/sources/mono/mono-$MONO_VERSION.tar.xz && \
     echo "Extracting mono.tar.xz (verbose disabled).." && \
 	tar xf mono.tar.xz && \
     cd mono-$MONO_VERSION && \
+	# Patch runtime/Makefile.am to ignore output 
+	git apply ../runtime-makefile-am.patch --ignore-space-change && \
     # Install build deps
     echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache libgdiplus-dev@testing zlib-dev linux-headers git autoconf libtool automake build-base gettext cmake python3 curl && \
