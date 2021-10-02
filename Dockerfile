@@ -41,10 +41,10 @@ RUN cd /src && \
 	# cd into build dir and remove unnecessary files (from APKBUILD)
 	cd /src/build && \
 	# > Remove .la files.
-	rm ./usr/lib/*.la && \
+	rm ./usr/lib/*.la; \
 	# > Remove Windows-only stuff.
-	rm -r ./usr/lib/mono/*/Mono.Security.Win32* && \
-	rm ./usr/lib/libMonoSupportW.*
+	rm -r ./usr/lib/mono/*/Mono.Security.Win32* || echo "rm likely errored, continuing"; \
+	rm ./usr/lib/libMonoSupportW.* || echo "rm likely errored, continuing";
 
 # Second stage: Create a docker image with only the mono runtime + runtime deps (fresh image)
 FROM alpine:3.14
