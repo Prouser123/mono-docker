@@ -31,7 +31,6 @@ RUN mkdir /src && cd /src && \
 		--enable-parallel-mark \
 		--with-mcs-docs=no \
 		--without-sigaltstack && \
-	make get-monolite-latest && \
 	make -j$(nproc) && \
 	# Run make install (from APKBUILD)
 	make -j$(nproc) DESTDIR="/src/build/" install && \
